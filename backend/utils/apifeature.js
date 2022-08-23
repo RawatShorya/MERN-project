@@ -1,3 +1,5 @@
+const { remove } = require("../models/productModel");
+
 class ApiFeatures {
   constructor(query, queryStr) {
     this.query = query; //It is everything after ? in link
@@ -15,6 +17,15 @@ class ApiFeatures {
       : {};
 
     this.query = this.query.find({ ...keyword });
+    return this;
+  }
+
+  filter() {
+    const queryCopy = { ...this.queryStr }; //We us spread operator which helps to make a copy rather then passing the value by reference
+    //Removing some fields for category
+    const removeFields = ["keywords", "page", "limit"];
+    removeFields.forEach((key) => delete queryCopy[key]);
+    this.query = this.query.find(queryCopy);
     return this;
   }
 }
